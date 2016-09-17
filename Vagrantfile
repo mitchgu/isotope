@@ -62,6 +62,7 @@ Vagrant.configure("2") do |config|
       smtp_domain: "isotope.mitchgu.com",
       smtp_password: "eWVQD90z6IdV8-OLm8OiHQ",
     }
+    ansible.raw_arguments = ['-e pipelining=True']
   end
 
 end
