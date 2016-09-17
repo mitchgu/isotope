@@ -1,0 +1,39 @@
+---
+- name: Update apt cache
+  apt: update_cache=yes
+  become: yes
+
+- name: Update all packages to the latest version
+  apt: upgrade=dist
+  become: yes
+
+- name: Update machine's hostname
+  hostname: name={{ hostname }}
+  become: yes
+  when: hostname is defined and vm is defined
+
+- name: Add hostname to /etc/hosts
+  lineinfile:
+    dest: /etc/hosts
+    line: 127.0.0.1 {{ hostname }}
+  become: yes
+  when: hostname is defined and vm is defined
+
+- name: Install apt packages
+  apt:
+    pkg: "{{ item }}"
+  become: yes
+  with_items: "{{ apt_packages }}"
+
+- name: Start ntp
+  service:
+    name: ntp
+    state: started
+  become: yes
+  when: vm is defined
+
+- name: Update MOTD
+  copy:
+    src: "{{ motd_file }}"
+    dest: /etc/motd
+  become: yes

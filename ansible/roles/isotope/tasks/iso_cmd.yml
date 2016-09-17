@@ -1,0 +1,14 @@
+---
+- name: Transfer iso_cmd
+  template:
+    src: iso_cmd.sh.j2
+    dest: /home/{{ ansible_ssh_user }}/iso_cmd.sh
+
+- name: Source iso_cmd in bash
+  lineinfile:
+    dest: /home/{{ ansible_ssh_user }}/.bashrc
+    line: ". /home/{{ ansible_ssh_user }}/iso_cmd.sh"
+    owner: "{{ ansible_ssh_user }}"
+    state: present
+    insertafter: EOF
+    create: True

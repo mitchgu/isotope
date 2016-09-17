@@ -1,0 +1,20 @@
+---
+- name: restart nginx
+  command: service nginx restart
+  become: yes
+
+- name: migrate db
+  command: bundle exec rails db:migrate
+  args:
+    chdir: "{{ app_dir }}"
+
+- name: precompile assets
+  command: bundle exec rails assets:precompile
+  args:
+    chdir: "{{ app_dir }}"
+
+- name: restart isotope
+  command: systemctl restart {{ app_name }}.target
+  environment:
+    RAILS_ENV: "{{ rails_env }}"
+  become: yes

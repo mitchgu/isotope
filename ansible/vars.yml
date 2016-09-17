@@ -1,0 +1,79 @@
+---
+apt_packages:
+  - build-essential
+  - git-core
+  - nginx
+  - ntp
+  - htop
+
+# ISOTOPE
+puma_socket: /tmp/{{ app_name }}.sock
+app_name: isotope
+app_dir: /srv/{{ app_name }}
+app_repo: git@github.com:mitchgu/isotope.git
+app_deploy_key: deploy_keys/isotope
+
+# NGINX
+nginx_sites: "{{ app_name }}"
+
+# LET'S ENCRYPT
+letsencrypt_cert_domains:
+  - "{{ domain_name }}"
+letsencrypt_webroot_path: "{{ app_dir }}/public"
+letsencrypt_authenticator: standalone
+letsencrypt_email: "webmaster@mitchgu.com"
+letsencrypt_renewal_command_args: '--renew-hook "systemctl restart nginx"'
+
+# POSTGRESQL
+postgresql_databases:
+  - name: "{{ db_name }}"
+    owner: "{{ db_user }}"
+
+postgresql_users:
+  - name: "{{ db_user }}"
+    pass: "{{ db_pass }}"
+
+postgresql_user_privileges:
+  - name: "{{ db_user }}"
+    db: "{{ db_name }}"
+    priv: "ALL"
+
+postgresql_pg_hba_trust_hosts: 
+  - "{{ app_ips }}"
+
+postgresql_listen_addresses:
+  - 0.0.0.0
+
+# postgresql_pg_hba_default:
+#   - type: host
+#     database: "{{ db_name }}"
+#     user: "{{ db_user }}"
+#     address: "{{ app_ips }}"
+#     method: 
+
+# REDIS
+redis_bind: "0.0.0.0"
+redis_port: 6379
+
+env_vars:
+  RAILS_ENV: "{{ rails_env }}"
+  RAILS_MAX_THREADS: 2
+  # SEKRITS
+  SECRET_KEY_BASE: "{{ secret_key_base }}"
+  # Database settings
+  DB_HOST: "{{ db_host }}"
+  DB_NAME: "{{ db_name }}"
+  DB_USER: "{{ db_user }}"
+  DB_PASS: "{{ db_pass }}"
+  # Redis settings
+  REDIS_HOST: "{{ db_host }}"
+  REDIS_PORT: "{{ redis_port }}"
+  # App settings
+  SUPERUSERS: "{{ superusers }}"
+  # Email settings
+  EMAIL_DEFAULT_HOST: "{{ email_default_host }}"
+  EMAIL_FROM_ADDRESS: "{{ email_from_address }}"
+  SMTP_ADDRESS: "{{ smtp_address }}"
+  SMTP_USERNAME: "{{ smtp_username }}"
+  SMTP_DOMAIN: "{{ smtp_domain }}"
+  SMTP_PASSWORD: "{{ smtp_password }}"

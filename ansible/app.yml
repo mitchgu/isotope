@@ -1,0 +1,13 @@
+---
+- name: App server setup
+  hosts: app
+  vars_files:
+    - vars.yml
+  roles:
+    - role: common
+      tags: common
+    - role: ansible-letsencrypt
+      when: ssl is defined and ssl
+      tags: letsencrypt
+    - role: isotope
+      tags: isotope

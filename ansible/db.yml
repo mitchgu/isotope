@@ -1,0 +1,14 @@
+---
+- name: DB server setup
+  hosts: db
+  vars_files:
+    - vars.yml
+  roles:
+    - role: common
+      tags: common
+    - role: postgresql
+      tags: postgres
+      become: yes
+    - role: ansible-redis
+      tags: redis
+      become: yes

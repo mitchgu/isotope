@@ -1,0 +1,31 @@
+---
+- name: Install packages rails needs
+  apt:
+    pkg: "{{ item }}"
+  become: yes
+  with_items:
+    - ruby
+    - ruby-dev
+    - libpq-dev
+    - libgmp3-dev
+    - nodejs
+# these may also be needed libnetcdf-dev libssl-dev libcrypto++-dev
+
+- name: Install bundler gem
+  command: gem install bundler
+  args:
+    creates: /usr/local/bin/bundle
+  become: yes
+
+- name: Install thor gem
+  command: gem install thor
+  args:
+    creates: /usr/local/bin/thor
+  become: yes
+
+- name: Install foreman gem
+  command: gem install foreman
+  args:
+    creates: /usr/local/bin/foreman
+  become: yes
+

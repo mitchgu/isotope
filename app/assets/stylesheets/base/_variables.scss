@@ -1,0 +1,61 @@
+// Breakpoints
+$medium-screen: 600px;
+$large-screen: 900px;
+
+// Typography
+$base-font-family: $font-stack-system;
+$heading-font-family: $base-font-family;
+
+// Font Sizes
+$base-font-size: 1em;
+
+// Line height
+$base-line-height: 1.5;
+$heading-line-height: 1.2;
+
+// Other Sizes
+$base-border-radius: 3px;
+$base-spacing: $base-line-height * 1em;
+$small-spacing: $base-spacing / 2;
+$base-z-index: 0;
+
+// Colors
+$blue: #1565c0;
+$gray-ff: #222;
+$gray-f: #444;
+$gray-mf: #666;
+$gray-m: #999;
+$gray-mp: #bbb;
+$gray-p: #eee;
+$gray-pp: #fafafa;
+$dark-gray: $gray-f;
+$medium-gray: $gray-m;
+$light-gray: $gray-p;
+
+// Font Colors
+$base-font-color: $dark-gray;
+$action-color: $blue;
+$alert-bg-color: #fff6bf;
+$error-bg-color: #fbe3e4;
+$notice-bg-color: #e5edf8;
+$success-bg-color: #e6efc2;
+$alert-color: darken($alert-bg-color, 50%);
+$error-color: darken($error-bg-color, 50%);
+$notice-color: darken($notice-bg-color, 50%);
+$success-color: darken($success-bg-color, 50%);
+
+// Border
+$base-border-color: $light-gray;
+$base-border: 1px solid $base-border-color;
+
+// Background Colors
+$base-background-color: #fff;
+$secondary-background-color: tint($base-border-color, 75%);
+
+// Forms
+$form-box-shadow: inset 0 1px 3px rgba(#000, 0.06);
+$form-box-shadow-focus: $form-box-shadow, 0 0 5px adjust-color($action-color, $lightness: -5%, $alpha: -0.3);
+
+// Animations
+$base-duration: 150ms;
+$base-timing: ease;

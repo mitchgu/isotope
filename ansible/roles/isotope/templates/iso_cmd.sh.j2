@@ -1,0 +1,66 @@
+#! /bin/bash
+
+echo -e '
+Use the \033[31miso\033[0m command! Usage:
+    iso \033[31mhome\033[0m - takes you to the app directory
+    iso \033[31mshell\033[0m - start a rails console
+    iso \033[31mstart\033[0m - starts the server using foreman
+    iso \033[31mmigrate\033[0m - migrate the db
+    iso \033[31mprecompile\033[0m - precompiles assets
+    iso \033[31mrestart\033[0m - restarts the puma server
+    iso \033[31mstop\033[0m - stop the puma server
+    iso \033[31mrailslog\033[0m - tails the rails log
+    iso \033[31mpumalog\033[0m - tails the puma log
+    iso \033[31mnginxlog\033[0m - tails the nginx log
+'
+tput sgr0
+
+#dd8733
+
+function iso() {
+    if [ "$1" == "home" ]
+    then
+        cd {{ app_dir }}
+    elif [ "$1" == "shell" ]
+    then
+        bundle exec rails console
+    elif [ "$1" == "start" ]
+    then
+        sudo foreman start
+    elif [ "$1" == "migrate" ]
+    then
+        bundle exec rails db:migrate
+    elif [ "$1" == "precompile" ]
+    then
+        bundle exec rails assets:precompile
+    elif [ "$1" == "restart" ]
+    then
+        sudo systemctl restart isotope.target
+    elif [ "$1" == "stop" ]
+    then
+        sudo systemctl stop isotope.target
+    elif [ "$1" == "railslog" ]
+    then
+        tail log/{{ rails_env }}.log
+    elif [ "$1" == "pumalog" ]
+    then
+        tail log/puma.stderr.log
+        tail log/puma.stdout.log
+    elif [ "$1" == "nginxlog" ]
+    then
+        sudo tail /var/log/nginx/error.log
+        sudo tail /var/log/nginx/access.log
+    else
+        echo -e "Usage:
+    iso \033[31mhome\033[0m - takes you to the app directory
+    iso \033[31mshell\033[0m - start a rails console
+    iso \033[31mstart\033[0m - starts the server using foreman
+    iso \033[31mmigrate\033[0m - migrate the db
+    iso \033[31mprecompile\033[0m - precompiles assets
+    iso \033[31mrestart\033[0m - restarts the puma server
+    iso \033[31mstop\033[0m - stop the puma server
+    iso \033[31mrailslog\033[0m - tails the rails log
+    iso \033[31mpumalog\033[0m - tails the puma log
+    iso \033[31mnginxlog\033[0m - tails the nginx log"
+    fi
+}

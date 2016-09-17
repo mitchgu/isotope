@@ -1,0 +1,42 @@
+---
+# Setup nginx
+- include: nginx.yml
+
+# Setup ruby
+- include: ruby.yml
+
+- name: chown /srv
+  file:
+    path: /srv
+    owner: "{{ ansible_ssh_user }}"
+  become: yes
+
+# Update src
+- include: src.yml
+  when: vm is not defined
+
+- name: Install bundled gems
+  bundler:
+    chdir: "{{ app_dir }}"
+
+- name: Copy dotenv
+  template:
+    src: .env.j2
+    dest: "{{ app_dir }}/.env"
+
+# Foreman
+- name: Export foreman to systemd
+  command: foreman export systemd /lib/systemd/system -a {{ app_name }} -u {{ ansible_ssh_user }}
+  args:
+    chdir: "{{ app_dir }}"
+  become: yes
+  when: code_updated is defined
+
+- name: Reload systemd
+  command: systemctl daemon-reload
+  become: yes
+  when: code_updated is defined and vm is not defined
+
+- include: iso_cmd.yml
+
+- meta: flush_handlers

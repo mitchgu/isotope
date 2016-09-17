@@ -1,0 +1,29 @@
+---
+- name: Make sure.ssh directory exists
+  file:
+    path: ~/.ssh
+    state: directory
+
+- name: Upload the private key used for Github cloning
+  copy:
+    src: "{{ app_deploy_key }}"
+    dest: ~/.ssh/{{ app_name }}
+
+- name: Correct SSH deploy key permissions
+  file:
+    dest: ~/.ssh/{{ app_name }}
+    mode: 0600
+
+- name: Clone code repo
+  git:
+    repo: "{{ app_repo }}"
+    dest: "{{ app_dir }}"
+    version: "{{ app_branch | default('master') }}"
+    accept_hostkey: yes
+    force: yes
+    key_file: ~/.ssh/{{ app_name }}
+  register: code_updated
+  notify:
+    - precompile assets
+    - migrate db
+    - restart isotope

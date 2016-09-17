@@ -1,0 +1,40 @@
+---
+- name: Install nginx
+  apt:
+    pkg: nginx
+  become: yes
+
+- name: Create strong DH group
+  command: openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
+  args:
+    creates: /etc/ssl/certs/dhparam.pem
+  become: yes
+  when: ssl is defined and ssl
+
+- name: Remove default nginx template
+  file:
+    state: absent
+    path: "{{ item }}"
+  become: yes
+  with_items:
+    - /etc/nginx/sites-enabled/default
+    - /etc/nginx/sites-available/default
+
+- name: Install nginx site conf
+  template:
+    src: "{{ app_name }}.conf.j2"
+    dest: /etc/nginx/sites-available/{{ app_name }}.conf
+    owner: root
+    group: root
+  become: yes
+  notify:
+    - restart nginx
+  when: nginx_sites is defined
+
+- name: Symlink nginx site config
+  file:
+    state: link
+    src: /etc/nginx/sites-available/{{ app_name }}.conf
+    dest: /etc/nginx/sites-enabled/{{ app_name }}.conf
+  become: yes
+  when: nginx_sites is defined

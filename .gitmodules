@@ -1,0 +1,9 @@
+[submodule "ansible/roles/ansible-redis"]
+	path = ansible/roles/ansible-redis
+	url = git@github.com:DavidWittman/ansible-redis
+[submodule "ansible/roles/ansible-letsencrypt"]
+	path = ansible/roles/ansible-letsencrypt
+	url = git@github.com:thefinn93/ansible-letsencrypt
+[submodule "ansible/roles/postgresql"]
+	path = ansible/roles/postgresql
+	url = git@github.com:ANXS/postgresql.git

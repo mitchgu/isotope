@@ -1,0 +1,6 @@
+hostname: localhost
+motd_file: default-motd
+apt_packages:
+  - build_essential
+  - git_core
+  - ntp
