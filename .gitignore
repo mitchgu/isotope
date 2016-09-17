@@ -41,3 +41,4 @@ ansible/deploy_keys/*
 # Ansible inventories
 ansible/production
 ansible/test
+.python-version
