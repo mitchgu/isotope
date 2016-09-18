@@ -13,6 +13,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "app", primary: true do |instance|
     instance.vm.network "forwarded_port", guest: 80, host: 8001
+    instance.vm.network "forwarded_port", guest: 5000, host: 5000
     instance.vm.network "private_network", ip: "192.168.33.10"
 
     instance.vm.synced_folder ".", "/srv/isotope", type: "rsync",
@@ -57,10 +58,10 @@ Vagrant.configure("2") do |config|
       superusers: "mitchgu",
       email_default_host: "localhost:8001",
       email_from_address: "Isotope Dev<info@localhost>",
-      smtp_address: "smtp.mailgun.org",
-      smtp_username: "isotope-dev@isotope.mitchgu.com",
+      smtp_address: "smtp-relay.sendinblue.com",
+      smtp_username: "mx.mitchell.gu@gmail.com",
       smtp_domain: "isotope.mitchgu.com",
-      smtp_password: "eWVQD90z6IdV8-OLm8OiHQ",
+      smtp_password: "ZXmT1dHM5zxPLn8W",
     }
     ansible.raw_arguments = ['-e pipelining=True']
   end
